@@ -1,5 +1,5 @@
-# Use the official Rust 1.75 image as the base
-FROM --platform=linux/amd64 rust:1.85-bookworm as base
+# Use the official Rust 1.85 image as the base
+FROM rust:1.85-bookworm as base
 
 # Install tools for building native binaries
 RUN sed -i 's@deb.debian.org@mirrors.aliyun.com@g' /etc/apt/sources.list.d/debian.sources

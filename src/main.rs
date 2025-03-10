@@ -7,10 +7,10 @@ use axum::{
 };
 use http::StatusCode;
 use mime_guess::from_path;
+use sha2::{Digest, Sha256};
 use std::fs;
 use std::net::SocketAddr;
 use tower_http::cors::{Any, CorsLayer};
-use sha2::{Sha256, Digest};
 
 const UPLOAD_PATH: &str = "/tmp/uploads";
 const MAX_FILE_SIZE: usize = 1_000_000; // 1MB in bytes
@@ -47,7 +47,10 @@ async fn upload(mut multipart: Multipart) -> Result<Json<String>, impl IntoRespo
             if data.len() > MAX_FILE_SIZE {
                 return Err(Response::builder()
                     .status(StatusCode::BAD_REQUEST)
-                    .body(Body::from(format!("File size exceeds the maximum limit of {} bytes", MAX_FILE_SIZE)))
+                    .body(Body::from(format!(
+                        "File size exceeds the maximum limit of {} bytes",
+                        MAX_FILE_SIZE
+                    )))
                     .unwrap());
             }
 
@@ -110,7 +113,10 @@ async fn download(Path(id): Path<String>) -> Result<impl IntoResponse, impl Into
         Ok(data) => Ok(Response::builder()
             .status(StatusCode::OK)
             .header("Content-Type", mime.as_ref())
-            .header("Content-Disposition", format!("attachment; filename=\"{}\"", original_name))
+            .header(
+                "Content-Disposition",
+                format!("attachment; filename=\"{}\"", original_name),
+            )
             .body(Body::from(data))
             .unwrap()),
         Err(err) => Err(Response::builder()
