@@ -2,7 +2,7 @@ import requests
 import hashlib
 
 # 服务器地址
-BASE_URL = "http://image-server.s.webace-i3c.com"  # 根据你的服务器配置调整
+BASE_URL = "http://image-server.com"  # 图片服务器 endpoint
 
 def calculate_file_hash(file_path):
     """计算文件的 SHA-256 哈希值"""
